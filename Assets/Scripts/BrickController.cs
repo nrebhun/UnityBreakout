@@ -4,6 +4,7 @@
 ///     The brick controller controls each brick individually, setting it to the appropriate color/shade, and
 /// calculating the appropriate number of points earned once it is cleared.
 /// </summary>
+
 using UnityEngine;
 using System.Collections;
 

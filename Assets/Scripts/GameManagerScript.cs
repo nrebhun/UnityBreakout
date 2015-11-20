@@ -8,14 +8,14 @@
 ///     The primary function of the GM is to control the flow of the game, handling events such as the start of the
 /// game, pausing, level progression, and end game by communicating with the appropriate gameobjects.
 /// </summary>
-/// 
+
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
 public class GameManagerScript : MonoBehaviour {
 	// Public variables
-	public Text scoreGUIText, livesGUIText, levelGUIText;
+	public Text scoreGUIText, pointPopupGUIText, livesGUIText, levelGUIText;
 	public Text titleGUIText, gameOverGUIText, endGameStatsGUIText, completedLevelGUIText;
 	public Button playButton, tryAgainButton, nextLevelButton;
 	public GameObject ball, paddle;
@@ -162,6 +162,8 @@ public class GameManagerScript : MonoBehaviour {
 	// Add points to score, update appropriate UI element, and increase ball speed modifier
 	void updateScore(int pointsToAdd) {
 		bricksBroken++;
+		pointPopupGUIText.SendMessage ("updatePointMarkerText", pointsToAdd);
+		pointPopupGUIText.SendMessage ("primePointMarkerForAppearance", ball.gameObject.transform.position);
 		score += pointsToAdd;
 		updateScoreGUIText ();
 	}

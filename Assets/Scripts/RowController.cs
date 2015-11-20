@@ -4,6 +4,7 @@
 ///     The only responsibility of the Row controller is to track the remaining associated bricks, and to
 /// communicate to the Game Manager when a row is cleared or when a brick from the top row is cleared.
 /// </summary>
+
 using UnityEngine;
 using System.Collections;
 

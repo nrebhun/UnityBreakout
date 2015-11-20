@@ -5,6 +5,7 @@
 /// whether or not it has been minimized, in conjunction with the Game Manager. This redundancy is mostly to prevent the
 /// paddle from changing size when it isn't supposed to.
 /// </summary>
+
 using UnityEngine;
 using System.Collections;
 
