@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿/// <summary>
+/// Brick Controller
+/// --------------------
+///     The brick controller controls each brick individually, setting it to the appropriate color/shade, and
+/// calculating the appropriate number of points earned once it is cleared.
+/// </summary>
+using UnityEngine;
 using System.Collections;
 
 public class BrickController : MonoBehaviour {
@@ -57,10 +63,11 @@ public class BrickController : MonoBehaviour {
 		if (weakened) {
 			gameManager.SendMessage("updateScore", getPointsEarned());
 			parentRow.SendMessage("reduceBricksRemaining");
-
+			gameManager.SendMessage("playPop");
 			gameObject.SetActive(false);
 		} else {
 			weakened = true;
+			gameManager.SendMessage("playBoop");
 			setBrickColor();
 		}
 	}

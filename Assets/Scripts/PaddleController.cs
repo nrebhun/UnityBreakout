@@ -1,9 +1,16 @@
+/// <summary>
+/// Paddle Controller
+/// --------------------
+///     The paddle controller polls the keyboard for user input, and moves the paddle accordingly. It also tracks 
+/// whether or not it has been minimized, in conjunction with the Game Manager. This redundancy is mostly to prevent the
+/// paddle from changing size when it isn't supposed to.
+/// </summary>
 using UnityEngine;
 using System.Collections;
 
 public class PaddleController : MonoBehaviour {
 	// Public Variables
-	public float speed;				// Decently playable at 150-200
+	public float speed;				// Decently playable around 200
 	public Vector3 initialPosition;
 
 	// Private Variables
@@ -36,7 +43,6 @@ public class PaddleController : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision col) {
-		Debug.Log("Paddle OCEnter");
 		// Nullify Paddle motion...
 		this.transform.Translate (0, 0, 0);
 

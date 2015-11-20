@@ -1,12 +1,14 @@
 ﻿/// <summary>
-/// Game Manager script.
+/// Game Manager
 /// --------------------
 ///     The Game Manager is an invisible gameObject in the primary scene which is responsible for managing key values
-/// of the game, including: score, current level, remaining number of lives, and then number of bricks and rows cleared.
-/// The GM is provided the maximum number of lives in the editor, as well as references to the ball and paddle, for
-/// easier access to these objects in relevant methods.
-/// Additionally, this object keeps track of whether the game is paused or not, 
+/// of the game, including: score, current level, remaining number of lives, and the number of bricks and rows cleared.
+/// The GM is provided the maximum number of lives in the editor, as well as references to the ball, paddle, and all UI
+/// elements for easier access to these objects in relevant methods. 
+///     The primary function of the GM is to control the flow of the game, handling events such as the start of the
+/// game, pausing, level progression, and end game by communicating with the appropriate gameobjects.
 /// </summary>
+/// 
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
@@ -18,6 +20,9 @@ public class GameManagerScript : MonoBehaviour {
 	public Button playButton, tryAgainButton, nextLevelButton;
 	public GameObject ball, paddle;
 	public int maxLives;
+	// Audio
+	public AudioSource boopPlayer, beepPlayer, popPlayer, lowPlayer, mrewPlayer, schwPlayer; 
+
 	// Private variables
 	private int livesRemaining = 0, score = 0, currentLevel = 0, bricksBroken = 0, rowsCleared = 0;
 	private bool gamePaused = true, paddleMinimized = false;
@@ -34,6 +39,7 @@ public class GameManagerScript : MonoBehaviour {
 		completedLevelGUIText.transform.localScale = Vector3.zero;
 		nextLevelButton.transform.localScale = Vector3.zero;
 
+		// Force 1280 by 720, windowed resolution settings
 		Screen.SetResolution (1280, 720, false);
 	}
 	// END UNITY METHODS ------------------------------------------
@@ -194,13 +200,14 @@ public class GameManagerScript : MonoBehaviour {
 		ball.SendMessage ("increaseSpeedModifier");
 		if ((++rowsCleared % 8) == 0) {
 			levelCleared();
-		}
+		}                                                          
 	}
 	
 	// When top row is breached, if paddle hasn't been minimized, make it so
 	void topRowBreached() {
 		if (!paddleMinimized) {
 			paddle.SendMessage("updatePaddleSize");
+			playMrew ();
 			paddleMinimized = true;
 		}
 	}
@@ -235,5 +242,30 @@ public class GameManagerScript : MonoBehaviour {
 									"Level Achieved: " + currentLevel + "\n" +
 									"Final Score: " + score + " points\n\n" +
 									"Thanks for playing!";
+	}
+
+	/* ----- Methods for playing audio ----- */
+	void playBoop() {
+		boopPlayer.PlayOneShot (boopPlayer.clip, 0.8f);
+	}
+
+	void playBeep() {
+		beepPlayer.PlayOneShot (beepPlayer.clip, 0.8f);
+	}
+
+	void playLow() {
+		lowPlayer.PlayOneShot (lowPlayer.clip, 0.8f);
+	}
+
+	void playPop() {
+		popPlayer.PlayOneShot (popPlayer.clip, 0.8f);
+	}
+
+	void playMrew() {
+		mrewPlayer.PlayOneShot (mrewPlayer.clip, 0.8f);
+	}
+
+	void playSchw() {
+		schwPlayer.PlayOneShot (schwPlayer.clip, 0.8f);
 	}
 }
