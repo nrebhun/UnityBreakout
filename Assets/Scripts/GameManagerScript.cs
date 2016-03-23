@@ -20,6 +20,11 @@ public class GameManagerScript : MonoBehaviour {
 	public Button playButton, tryAgainButton, nextLevelButton;
 	public GameObject ball, paddle;
 	public int maxLives;
+
+	// Brick Data, organized for Editor clarity
+	public Color yellowColor, greenColor, orangeColor, redColor;
+	public int yellowPointValue, greenPointValue, orangePointValue, redPointValue;
+
 	// Audio
 	public AudioSource boopPlayer, beepPlayer, popPlayer, lowPlayer, mrewPlayer, schwPlayer; 
 
@@ -39,24 +44,30 @@ public class GameManagerScript : MonoBehaviour {
 		completedLevelGUIText.transform.localScale = Vector3.zero;
 		nextLevelButton.transform.localScale = Vector3.zero;
 
-		// Force 1280 by 720, windowed resolution settings
-		Screen.SetResolution (1280, 720, false);
-	}
-	// END UNITY METHODS ------------------------------------------
-
-	/* ----- Game State methods, including r ----- */
-	// True initialization of gameplay
-	void beginGame() {
+		// Gather all needed GameObjects
 		brickSet = GameObject.FindGameObjectsWithTag ("Brick");
 		rowSet = GameObject.FindGameObjectsWithTag ("Row");
 		topRow = GameObject.FindGameObjectWithTag ("Top Row");
 
+		// Initialize brick data
+		initializeBrickData ();
+		resetBricks ();
+
+		// Force 1280 by 800, windowed resolution settings
+		Screen.SetResolution (1280, 720, false);
+	}
+	// END UNITY METHODS ------------------------------------------
+
+	/* ----- Game State methods ----- */
+	// True initialization of gameplay
+	void beginGame() {
 		titleGUIText.transform.localScale = Vector3.zero;
 		playButton.transform.localScale = Vector3.zero;
 
 		resetAllKeyValues ();
 		toggleGamePaused ();
 	}
+
 
 	// Board Cleared! Pause game and display proper UI elements
 	void levelCleared() {
@@ -181,6 +192,18 @@ public class GameManagerScript : MonoBehaviour {
 	}
 
 	/* ----- Methods handling the game board ----- */
+	// Initialize bricks with desired data (color/point values)
+	void initializeBrickData (){
+		// Load values into array, due to single-argument sendMessage restriction
+		int[] tempPointArray = {yellowPointValue, greenPointValue, orangePointValue, redPointValue};
+		Color[] tempColorArray = {yellowColor, greenColor, orangeColor, redColor};
+
+		foreach (GameObject brick in brickSet) {
+			brick.SendMessage("setPointValues", tempPointArray);
+			brick.SendMessage("setColorValues", tempColorArray);
+		}
+	}
+
 	// Re-activate and reset all bricks in the scene
 	void resetBricks (){
 		foreach (GameObject brick in brickSet) {
@@ -200,7 +223,7 @@ public class GameManagerScript : MonoBehaviour {
 	// When a row clears, increase ball speed
 	void rowCleared() {
 		ball.SendMessage ("increaseSpeedModifier");
-		if ((++rowsCleared % 8) == 0) {
+		if ((++rowsCleared % 8) == 0) {	// Check for level completion
 			levelCleared();
 		}                                                          
 	}

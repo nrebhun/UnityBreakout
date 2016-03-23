@@ -13,9 +13,11 @@ public class PaddleController : MonoBehaviour {
 	// Public Variables
 	public float speed;				// Decently playable around 200
 	public Vector3 initialPosition;
+	public Vector3 initialPaddleSize;
+	public Vector3 minimizedPaddleSize;
 
 	// Private Variables
-	private int moveDirection;		// positive = right, negative = left, 0 = no motion
+	private int moveDirection, toTheRight = 1, toTheLeft = -1;		// positive = right, negative = left, 0 = no motion
 	private float horizontalAxisInput;
 	private Renderer paddleRenderer;
 	private bool paused = true, minimized, hitLeftWall = false, hitRightWall = false;
@@ -64,18 +66,17 @@ public class PaddleController : MonoBehaviour {
 			hitRightWall = false;
 		}
 	}
-
 	// END UNITY METHODS ------------------------------------------
 
 	void pollKeyboard() {
 		// Get horizontal directional input from user 
 		horizontalAxisInput = Input.GetAxis ("Horizontal");
 
-		// Alter paddle direction accordingly
+		// Alter paddle direction accordingly, -1 == left, +1 == right, 0 == no direction
 		if (horizontalAxisInput < 0 && !hitLeftWall) {
-			moveDirection = -1;
+			moveDirection = toTheLeft;
 		} else if (horizontalAxisInput > 0 && !hitRightWall) {
-			moveDirection = 1;
+			moveDirection = toTheRight;
 		} else {
 			moveDirection = 0;
 		}
@@ -84,7 +85,7 @@ public class PaddleController : MonoBehaviour {
 	// Set paddle size to be less-wide if it hasn't already been changed
 	void updatePaddleSize() {
 		if (!minimized) {
-			transform.localScale = new Vector3(2.0f, 0.6f, 1.0f);
+			transform.localScale = minimizedPaddleSize;
 			minimized = true;
 		}
 	}
@@ -92,7 +93,7 @@ public class PaddleController : MonoBehaviour {
 	// Reset paddle position and size
 	void resetPaddle() {
 		transform.position = initialPosition;
-		transform.localScale = new Vector3(3.0f, 0.6f, 1.0f);
+		transform.localScale = initialPaddleSize;
 		minimized = false;
 	}
 

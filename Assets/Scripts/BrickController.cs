@@ -10,7 +10,7 @@ using System.Collections;
 
 public class BrickController : MonoBehaviour {
 	// Public Variables
-	public enum level {Yellow, Green, Orange, Red}; 
+	public enum level {Yellow, Green, Orange, Red};
 	public level brickLevel;
 	public GameObject gameManager;
 
@@ -18,6 +18,10 @@ public class BrickController : MonoBehaviour {
 	private bool weakened = false;
 	private Renderer brickRenderer;
 	private GameObject parentRow;
+
+	// point/color Values[0-4] : 0 == yellow, 1 == green, 2 == orange, 3 == red
+	private int[] pointValues = {0, 0, 0, 0};
+	private Color[] colorValues = {Color.black, Color.black, Color.black, Color.black};
 	// END GLOBAL VARIABLES ---------------------------------------
 
 	void Start () {
@@ -37,25 +41,25 @@ public class BrickController : MonoBehaviour {
 	// END UNITY METHODS ------------------------------------------
 
 	void setBrickColor() {
-		if (this.weakened) {
+		if (weakened) {
 			if (brickLevel == level.Yellow) {
-				brickRenderer.material.color = Color.yellow;
+				brickRenderer.material.color = colorValues[0];
 			} else if (brickLevel == level.Green) {
-				brickRenderer.material.color = Color.green;
+				brickRenderer.material.color = colorValues[1];
 			} else if (brickLevel == level.Orange) {
-				brickRenderer.material.color = (Color.red + Color.yellow) / 2;
+				brickRenderer.material.color = colorValues[2];
 			} else {
-				brickRenderer.material.color = Color.red;
+				brickRenderer.material.color = colorValues[3];
 			}
 		} else {
 			if (brickLevel == level.Yellow) {
-				brickRenderer.material.color = Color.yellow * 2;
+				brickRenderer.material.color = colorValues[0] * 2;
 			} else if (brickLevel == level.Green) {
-				brickRenderer.material.color = Color.green * 2;
+				brickRenderer.material.color = colorValues[1] * 2;
 			} else if (brickLevel == level.Orange) {
-				brickRenderer.material.color = Color.red + Color.yellow;
+				brickRenderer.material.color = colorValues[2] * 2;
 			} else {
-				brickRenderer.material.color = Color.red * 2;
+				brickRenderer.material.color = colorValues[3] * 2;
 			}
 		}
 	}
@@ -73,15 +77,31 @@ public class BrickController : MonoBehaviour {
 		}
 	}
 
+	// Set the values for earned points
+	void setPointValues(int[] newPointValues) {
+		pointValues [0] = newPointValues[0];
+		pointValues [1] = newPointValues[1];
+		pointValues [2] = newPointValues[2];
+		pointValues [3] = newPointValues[3];
+	}
+
+	// Set the color values
+	void setColorValues(Color[] newColorValues) {
+		colorValues [0] = newColorValues[0];
+		colorValues [1] = newColorValues[1];
+		colorValues [2] = newColorValues[2];
+		colorValues [3] = newColorValues[3];
+	}
+
 	int getPointsEarned() {
 		if (brickLevel == level.Yellow) {
-			return 1;
+			return pointValues[0];
 		} else if (brickLevel == level.Green) {
-			return 3;
+			return pointValues[1];
 		} else if (brickLevel == level.Orange) {
-			return 5;
+			return pointValues[2];
 		} else {
-			return 7;
+			return pointValues[3];
 		}
 	}
 
